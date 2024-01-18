@@ -10,45 +10,46 @@ import (
 var _ GeneralSet = new(UnderReviewGeneralSet)
 
 type UnderReviewGeneralSet struct {
+	Name       string
 	LastSet    sets.Set
 	AtLeastOne bool
 	Nums       int
 	Gaps       *gaps.Gaps
 }
 
-func NewGeneralSet_UnderReview(lastSet sets.Set) *UnderReviewGeneralSet {
-	return &UnderReviewGeneralSet{lastSet, false, 0, gaps.NewGaps(time.NewTime(23, 54))}
+func NewGeneralSet_UnderReview(name string, lastSet sets.Set) *UnderReviewGeneralSet {
+	return &UnderReviewGeneralSet{name, lastSet, false, 0, gaps.NewGaps(time.NewTime(23, 54))}
 }
 
-func (s *UnderReviewGeneralSet) GetName() string {
-	return "Under-Review"
+func (gs *UnderReviewGeneralSet) GetName() string {
+	return gs.Name
 }
 
-func (s *UnderReviewGeneralSet) GetLastSet() sets.Set {
-	return s.LastSet
+func (gs *UnderReviewGeneralSet) GetLastSet() sets.Set {
+	return gs.LastSet
 }
 
-func (s *UnderReviewGeneralSet) SetLastSet(set sets.Set) {
-	s.LastSet = set
-	s.Gaps = gaps.NewGaps(set.GetLastTime())
+func (gs *UnderReviewGeneralSet) SetLastSet(set sets.Set) {
+	gs.LastSet = set
+	gs.Gaps = gaps.NewGaps(set.GetLastTime())
 }
 
-func (s *UnderReviewGeneralSet) GetAtLeastOne() bool {
-	return s.AtLeastOne
+func (gs *UnderReviewGeneralSet) GetAtLeastOne() bool {
+	return gs.AtLeastOne
 }
 
-func (s *UnderReviewGeneralSet) SetAtLeastOne(b bool) {
-	s.AtLeastOne = b
+func (gs *UnderReviewGeneralSet) SetAtLeastOne(b bool) {
+	gs.AtLeastOne = b
 }
 
-func (s *UnderReviewGeneralSet) GetNums() int {
-	return s.Nums
+func (gs *UnderReviewGeneralSet) GetNums() int {
+	return gs.Nums
 }
 
-func (s *UnderReviewGeneralSet) IncreaseNums() {
-	s.Nums++
+func (gs *UnderReviewGeneralSet) IncreaseNums() {
+	gs.Nums++
 }
 
-func (s *UnderReviewGeneralSet) GetGaps() *gaps.Gaps {
-	return s.Gaps
+func (gs *UnderReviewGeneralSet) GetGaps() *gaps.Gaps {
+	return gs.Gaps
 }

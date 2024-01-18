@@ -7,7 +7,6 @@ import (
 
 type GeneralSet interface {
 	GetName() string
-
 	GetLastSet() sets.Set
 	SetLastSet(sets.Set)
 	GetAtLeastOne() bool

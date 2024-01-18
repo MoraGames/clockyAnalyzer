@@ -10,45 +10,46 @@ import (
 var _ GeneralSet = new(ApprovedGeneralSet)
 
 type ApprovedGeneralSet struct {
+	Name       string
 	LastSet    sets.Set
 	AtLeastOne bool
 	Nums       int
 	Gaps       *gaps.Gaps
 }
 
-func NewGeneralSet_Approved(lastSet sets.Set) *ApprovedGeneralSet {
-	return &ApprovedGeneralSet{lastSet, false, 0, gaps.NewGaps(time.NewTime(23, 54))}
+func NewGeneralSet_Approved(name string, lastSet sets.Set) *ApprovedGeneralSet {
+	return &ApprovedGeneralSet{name, lastSet, false, 0, gaps.NewGaps(time.NewTime(23, 54))}
 }
 
-func (s *ApprovedGeneralSet) GetName() string {
-	return "Approved"
+func (gs *ApprovedGeneralSet) GetName() string {
+	return gs.Name
 }
 
-func (s *ApprovedGeneralSet) GetLastSet() sets.Set {
-	return s.LastSet
+func (gs *ApprovedGeneralSet) GetLastSet() sets.Set {
+	return gs.LastSet
 }
 
-func (s *ApprovedGeneralSet) SetLastSet(set sets.Set) {
-	s.LastSet = set
-	s.Gaps = gaps.NewGaps(set.GetLastTime())
+func (gs *ApprovedGeneralSet) SetLastSet(set sets.Set) {
+	gs.LastSet = set
+	gs.Gaps = gaps.NewGaps(set.GetLastTime())
 }
 
-func (s *ApprovedGeneralSet) GetAtLeastOne() bool {
-	return s.AtLeastOne
+func (gs *ApprovedGeneralSet) GetAtLeastOne() bool {
+	return gs.AtLeastOne
 }
 
-func (s *ApprovedGeneralSet) SetAtLeastOne(b bool) {
-	s.AtLeastOne = b
+func (gs *ApprovedGeneralSet) SetAtLeastOne(b bool) {
+	gs.AtLeastOne = b
 }
 
-func (s *ApprovedGeneralSet) GetNums() int {
-	return s.Nums
+func (gs *ApprovedGeneralSet) GetNums() int {
+	return gs.Nums
 }
 
-func (s *ApprovedGeneralSet) IncreaseNums() {
-	s.Nums++
+func (gs *ApprovedGeneralSet) IncreaseNums() {
+	gs.Nums++
 }
 
-func (s *ApprovedGeneralSet) GetGaps() *gaps.Gaps {
-	return s.Gaps
+func (gs *ApprovedGeneralSet) GetGaps() *gaps.Gaps {
+	return gs.Gaps
 }
