@@ -11,26 +11,27 @@ var _ Set = new(PerfectSquareSet)
 
 type PerfectSquareSet struct {
 	LastTime time.Time
+	Name     string
 	Label    string
 	Nums     int
 	Gaps     *gaps.Gaps
 }
 
-func NewSet_PerfectSquare(label string) *PerfectSquareSet {
+func NewSet_PerfectSquare(name, label string) *PerfectSquareSet {
 	lstTime := time.NewTime(23, 04)
-	return &PerfectSquareSet{lstTime, label, 0, gaps.NewGaps(lstTime)}
-}
-
-func (s *PerfectSquareSet) GetName() string {
-	return "PerfectSquare"
-}
-
-func (s *PerfectSquareSet) GetLabel() string {
-	return s.Label
+	return &PerfectSquareSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
 }
 
 func (s *PerfectSquareSet) GetLastTime() time.Time {
 	return s.LastTime
+}
+
+func (s *PerfectSquareSet) GetName() string {
+	return s.Name
+}
+
+func (s *PerfectSquareSet) GetLabel() string {
+	return s.Label
 }
 
 func (s *PerfectSquareSet) GetNums() int {

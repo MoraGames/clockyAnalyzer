@@ -10,26 +10,27 @@ var _ Set = new(SumAndDifferenceSet)
 
 type SumAndDifferenceSet struct {
 	LastTime time.Time
+	Name     string
 	Label    string
 	Nums     int
 	Gaps     *gaps.Gaps
 }
 
-func NewSet_SumAndDifference(label string) *SumAndDifferenceSet {
+func NewSet_SumAndDifference(name, label string) *SumAndDifferenceSet {
 	lstTime := time.NewTime(23, 00)
-	return &SumAndDifferenceSet{lstTime, label, 0, gaps.NewGaps(lstTime)}
-}
-
-func (s *SumAndDifferenceSet) GetName() string {
-	return "SumAndDifference"
-}
-
-func (s *SumAndDifferenceSet) GetLabel() string {
-	return s.Label
+	return &SumAndDifferenceSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
 }
 
 func (s *SumAndDifferenceSet) GetLastTime() time.Time {
 	return s.LastTime
+}
+
+func (s *SumAndDifferenceSet) GetName() string {
+	return s.Name
+}
+
+func (s *SumAndDifferenceSet) GetLabel() string {
+	return s.Label
 }
 
 func (s *SumAndDifferenceSet) GetNums() int {

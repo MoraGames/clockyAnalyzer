@@ -10,26 +10,27 @@ var _ Set = new(SymmetricalDifferenceSet)
 
 type SymmetricalSumSet struct {
 	LastTime time.Time
+	Name     string
 	Label    string
 	Nums     int
 	Gaps     *gaps.Gaps
 }
 
-func NewSet_SymmetricalSum(label string) *SymmetricalSumSet {
+func NewSet_SymmetricalSum(name, label string) *SymmetricalSumSet {
 	lstTime := time.NewTime(23, 56)
-	return &SymmetricalSumSet{lstTime, label, 0, gaps.NewGaps(lstTime)}
-}
-
-func (s *SymmetricalSumSet) GetName() string {
-	return "SymmetricalSum"
-}
-
-func (s *SymmetricalSumSet) GetLabel() string {
-	return s.Label
+	return &SymmetricalSumSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
 }
 
 func (s *SymmetricalSumSet) GetLastTime() time.Time {
 	return s.LastTime
+}
+
+func (s *SymmetricalSumSet) GetName() string {
+	return s.Name
+}
+
+func (s *SymmetricalSumSet) GetLabel() string {
+	return s.Label
 }
 
 func (s *SymmetricalSumSet) GetNums() int {

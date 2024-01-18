@@ -11,26 +11,27 @@ var _ Set = new(SymmetricalDifferenceSet)
 
 type SymmetricalDifferenceSet struct {
 	LastTime time.Time
+	Name     string
 	Label    string
 	Nums     int
 	Gaps     *gaps.Gaps
 }
 
-func NewSet_SymmetricalDifference(label string) *SymmetricalDifferenceSet {
+func NewSet_SymmetricalDifference(name, label string) *SymmetricalDifferenceSet {
 	lstTime := time.NewTime(23, 54)
-	return &SymmetricalDifferenceSet{lstTime, label, 0, gaps.NewGaps(lstTime)}
-}
-
-func (s *SymmetricalDifferenceSet) GetName() string {
-	return "SymmetricalDifference"
-}
-
-func (s *SymmetricalDifferenceSet) GetLabel() string {
-	return s.Label
+	return &SymmetricalDifferenceSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
 }
 
 func (s *SymmetricalDifferenceSet) GetLastTime() time.Time {
 	return s.LastTime
+}
+
+func (s *SymmetricalDifferenceSet) GetName() string {
+	return s.Name
+}
+
+func (s *SymmetricalDifferenceSet) GetLabel() string {
+	return s.Label
 }
 
 func (s *SymmetricalDifferenceSet) GetNums() int {

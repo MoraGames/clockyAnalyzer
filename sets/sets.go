@@ -6,13 +6,11 @@ import (
 )
 
 type Set interface {
-	GetName() string
-
 	GetLastTime() time.Time
+	GetName() string
 	GetLabel() string
 	GetNums() int
 	IncreaseNums()
 	GetGaps() *gaps.Gaps
-
 	Verify(h1, h2, m1, m2 int) bool
 }
