@@ -16,19 +16,30 @@ var (
 func main() {
 	generalSets := map[string]generalSets.GeneralSet{
 		// General sets
-		"Any":          generalSets.NewGeneralSet_Any(nil),
-		"Approved":     generalSets.NewGeneralSet_Approved(nil),
-		"Under-Review": generalSets.NewGeneralSet_UnderReview(nil),
+		"Any":          generalSets.NewGeneralSet_Any("Any", nil),
+		"Approved":     generalSets.NewGeneralSet_Approved("Approved", nil),
+		"Under-Review": generalSets.NewGeneralSet_UnderReview("Under-Review", nil),
 	}
 	allSets := []sets.Set{
 		// Approved sets
-		// -- none --
+		sets.NewSet_Equal("Equal", "Approved"),
+		sets.NewSet_ShortEqual("ShortEqual", "Approved"),
+		sets.NewSet_Repeat("Repeat", "Approved"),
+		sets.NewSet_Mirror("Mirror", "Approved"),
+		sets.NewSet_Rise("Rise", "Approved"),
+		sets.NewSet_ShortRise("ShortRise", "Approved"),
+		sets.NewSet_ShortFall("ShortFall", "Approved"),
+		sets.NewSet_RapidRise("RapidRise", "Approved"),
+		sets.NewSet_ShortRapidRise("ShortRapidRise", "Approved"),
+		sets.NewSet_ShortRapidFall("ShortRapidFall", "Approved"),
+		sets.NewSet_Double("Double", "Approved"),
 
 		// In-Review sets
-		sets.NewSet_SymmetricalDifference("Under-Review"),
-		sets.NewSet_SymmetricalSum("Under-Review"),
-		sets.NewSet_PerfectSquare("Under-Review"),
-		sets.NewSet_SumAndDifference("Under-Review"),
+		sets.NewSet_ShortTriple("ShortTriple", "Under-Review"),
+		sets.NewSet_SymmetricalDifference("SymmetricalDifference", "Under-Review"),
+		sets.NewSet_SymmetricalSum("SymmetricalSum", "Under-Review"),
+		sets.NewSet_PerfectSquare("PerfectSquare", "Under-Review"),
+		sets.NewSet_SumAndDifference("SumAndDifference", "Under-Review"),
 
 		// Rejected sets
 		// -- none --
