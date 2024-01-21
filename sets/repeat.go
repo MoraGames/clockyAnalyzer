@@ -17,8 +17,16 @@ type RepeatSet struct {
 }
 
 func NewSet_Repeat(name, label string) *RepeatSet {
-	lstTime := time.NewTime(23, 56)
-	return &RepeatSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = RepeatSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 23)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *RepeatSet) GetLastTime() time.Time {

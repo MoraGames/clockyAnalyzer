@@ -17,8 +17,16 @@ type ShortRapidRiseSet struct {
 }
 
 func NewSet_ShortRapidRise(name, label string) *ShortRapidRiseSet {
-	lstTime := time.NewTime(23, 56)
-	return &ShortRapidRiseSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = ShortRapidRiseSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 57)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *ShortRapidRiseSet) GetLastTime() time.Time {

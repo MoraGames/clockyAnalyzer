@@ -17,8 +17,16 @@ type SymmetricalSumSet struct {
 }
 
 func NewSet_SymmetricalSum(name, label string) *SymmetricalSumSet {
+	var set = SymmetricalSumSet{Name: name, Label: label, Nums: 0}
+
 	lstTime := time.NewTime(23, 56)
-	return &SymmetricalSumSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *SymmetricalSumSet) GetLastTime() time.Time {

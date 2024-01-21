@@ -17,8 +17,16 @@ type ShortFallSet struct {
 }
 
 func NewSet_ShortFall(name, label string) *ShortFallSet {
-	lstTime := time.NewTime(23, 56)
-	return &ShortFallSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = ShortFallSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 21)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *ShortFallSet) GetLastTime() time.Time {

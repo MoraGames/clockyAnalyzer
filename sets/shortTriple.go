@@ -17,8 +17,16 @@ type ShortTripleSet struct {
 }
 
 func NewSet_ShortTriple(name, label string) *ShortTripleSet {
-	lstTime := time.NewTime(23, 56)
-	return &ShortTripleSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = ShortTripleSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 9)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *ShortTripleSet) GetLastTime() time.Time {

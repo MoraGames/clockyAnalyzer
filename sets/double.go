@@ -17,8 +17,16 @@ type DoubleSet struct {
 }
 
 func NewSet_Double(name, label string) *DoubleSet {
-	lstTime := time.NewTime(23, 56)
-	return &DoubleSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = DoubleSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 46)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Double: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *DoubleSet) GetLastTime() time.Time {

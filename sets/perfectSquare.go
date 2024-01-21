@@ -18,8 +18,16 @@ type PerfectSquareSet struct {
 }
 
 func NewSet_PerfectSquare(name, label string) *PerfectSquareSet {
+	var set = PerfectSquareSet{Name: name, Label: label, Nums: 0}
+
 	lstTime := time.NewTime(23, 04)
-	return &PerfectSquareSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *PerfectSquareSet) GetLastTime() time.Time {

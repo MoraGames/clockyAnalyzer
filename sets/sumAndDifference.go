@@ -17,8 +17,16 @@ type SumAndDifferenceSet struct {
 }
 
 func NewSet_SumAndDifference(name, label string) *SumAndDifferenceSet {
+	var set = SumAndDifferenceSet{Name: name, Label: label, Nums: 0}
+
 	lstTime := time.NewTime(23, 00)
-	return &SumAndDifferenceSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *SumAndDifferenceSet) GetLastTime() time.Time {

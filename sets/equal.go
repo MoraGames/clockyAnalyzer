@@ -17,8 +17,16 @@ type EqualSet struct {
 }
 
 func NewSet_Equal(name, label string) *EqualSet {
-	lstTime := time.NewTime(23, 56)
-	return &EqualSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = EqualSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 23)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Equal: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *EqualSet) GetLastTime() time.Time {

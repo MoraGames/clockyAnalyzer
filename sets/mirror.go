@@ -17,8 +17,16 @@ type MirrorSet struct {
 }
 
 func NewSet_Mirror(name, label string) *MirrorSet {
-	lstTime := time.NewTime(23, 56)
-	return &MirrorSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = MirrorSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 32)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *MirrorSet) GetLastTime() time.Time {

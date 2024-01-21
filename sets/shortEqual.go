@@ -17,8 +17,16 @@ type ShortEqualSet struct {
 }
 
 func NewSet_ShortEqual(name, label string) *ShortEqualSet {
-	lstTime := time.NewTime(23, 56)
-	return &ShortEqualSet{lstTime, name, label, 0, gaps.NewGaps(lstTime)}
+	var set = ShortEqualSet{Name: name, Label: label, Nums: 0}
+
+	lstTime := time.NewTime(23, 33)
+	if !set.Verify(lstTime.SplitTime()) {
+		panic("sets: NewSet_Mirror: lstTime is not valid")
+	}
+	set.LastTime = lstTime
+	set.Gaps = gaps.NewGaps(lstTime)
+
+	return &set
 }
 
 func (s *ShortEqualSet) GetLastTime() time.Time {
