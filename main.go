@@ -1,145 +1,122 @@
 package main
 
 import (
-	"fmt"
-	"other/bp/cuwu_setstest/generalSets"
-	"other/bp/cuwu_setstest/sets"
-	"other/bp/cuwu_setstest/time"
+	"github.com/MoraGames/clockyAnalyzer/groups"
+	"github.com/MoraGames/clockyAnalyzer/prints"
+	"github.com/MoraGames/clockyAnalyzer/sets"
+	"github.com/MoraGames/clockyAnalyzer/time"
+)
+
+const (
+	TotalTimes = 24 * 60
 )
 
 var (
-	PrintEveryTime  bool = false
-	PrintFinalStats bool = true
-	PrintAllGaps    bool = false
+	AllGroups = map[string]*groups.Group{
+		"Any":          groups.NewGroup("Any"),
+		"Approved":     groups.NewGroup("Approved"),
+		"Under-Review": groups.NewGroup("Under-Review"),
+		"Rejected":     groups.NewGroup("Rejected"),
+	}
+	AllSets = []*sets.Set{
+		// Approved sets
+		sets.NewSet("Equal", "Approved", sets.Equal, time.NewTime(22, 22)),
+		sets.NewSet("ShortEqual", "Approved", sets.ShortEqual, time.NewTime(23, 33)),
+		sets.NewSet("Repeat", "Approved", sets.Repeat, time.NewTime(23, 23)),
+		sets.NewSet("Mirror", "Approved", sets.Mirror, time.NewTime(23, 32)),
+		sets.NewSet("Rise", "Approved", sets.Rise, time.NewTime(23, 45)),
+		sets.NewSet("ShortRise", "Approved", sets.ShortRise, time.NewTime(23, 45)),
+		sets.NewSet("ShortFall", "Approved", sets.ShortFall, time.NewTime(23, 21)),
+		sets.NewSet("RapidRise", "Approved", sets.RapidRise, time.NewTime(13, 57)),
+		sets.NewSet("ShortRapidRise", "Approved", sets.ShortRapidRise, time.NewTime(23, 57)),
+		sets.NewSet("ShortRapidFall", "Approved", sets.ShortRapidFall, time.NewTime(17, 53)),
+		sets.NewSet("Double", "Approved", sets.Double, time.NewTime(23, 46)),
+
+		// In-Review sets
+		sets.NewSet("ShortTriple", "Under-Review", sets.ShortTriple, time.NewTime(23, 9)),
+		sets.NewSet("SymmetricalDifference", "Under-Review", sets.SymmetricalDifference, time.NewTime(23, 54)),
+		sets.NewSet("SymmetricalSum", "Under-Review", sets.SymmetricalSum, time.NewTime(23, 56)),
+		sets.NewSet("PerfectSquare", "Under-Review", sets.PerfectSquare, time.NewTime(23, 04)),
+
+		// Rejected sets
+		sets.NewSet("SumAndDifference", "Rejected", sets.SumAndDifference, time.NewTime(23, 00)),
+	}
 )
 
 func main() {
-	generalSets := map[string]generalSets.GeneralSet{
-		// General sets
-		"Any":          generalSets.NewGeneralSet_Any("Any", nil),
-		"Approved":     generalSets.NewGeneralSet_Approved("Approved", nil),
-		"Under-Review": generalSets.NewGeneralSet_UnderReview("Under-Review", nil),
-	}
-	allSets := []sets.Set{
-		// Approved sets
-		sets.NewSet_Equal("Equal", "Approved"),
-		sets.NewSet_ShortEqual("ShortEqual", "Approved"),
-		sets.NewSet_Repeat("Repeat", "Approved"),
-		sets.NewSet_Mirror("Mirror", "Approved"),
-		sets.NewSet_Rise("Rise", "Approved"),
-		sets.NewSet_ShortRise("ShortRise", "Approved"),
-		sets.NewSet_ShortFall("ShortFall", "Approved"),
-		sets.NewSet_RapidRise("RapidRise", "Approved"),
-		sets.NewSet_ShortRapidRise("ShortRapidRise", "Approved"),
-		sets.NewSet_ShortRapidFall("ShortRapidFall", "Approved"),
-		sets.NewSet_Double("Double", "Approved"),
-
-		// In-Review sets
-		sets.NewSet_ShortTriple("ShortTriple", "Under-Review"),
-		sets.NewSet_SymmetricalDifference("SymmetricalDifference", "Under-Review"),
-		sets.NewSet_SymmetricalSum("SymmetricalSum", "Under-Review"),
-		sets.NewSet_PerfectSquare("PerfectSquare", "Under-Review"),
-		sets.NewSet_SumAndDifference("SumAndDifference", "Under-Review"),
-
-		// Rejected sets
-		// -- none --
-	}
-
-	// Find and update the last set of the day (the set with the smallest gap) for each general set
-	for _, set := range allSets {
-		if generalSets["Any"].GetLastSet() == nil || set.GetGaps().Cur < generalSets["Any"].GetLastSet().GetGaps().Cur {
-			generalSets["Any"].SetLastSet(set)
+	// Find and update the last set of the day (the set with the smallest gap) for each group
+	for _, set := range AllSets {
+		if AllGroups["Any"].LastSet == nil || set.Gaps.Cur < AllGroups["Any"].LastSet.Gaps.Cur {
+			AllGroups["Any"].SetLastSet(set)
 		}
-		if generalSets[set.GetLabel()].GetLastSet() == nil || set.GetGaps().Cur < generalSets[set.GetLabel()].GetLastSet().GetGaps().Cur {
-			generalSets[set.GetLabel()].SetLastSet(set)
+		if AllGroups[set.Label].LastSet == nil || set.Gaps.Cur < AllGroups[set.Label].LastSet.Gaps.Cur {
+			AllGroups[set.Label].SetLastSet(set)
 		}
 	}
-
-	// lastSet := allSets[0]
-	// for _, set := range allSets[1:] {
-	// 	if set.GetGaps().Cur < lastSet.GetGaps().Cur {
-	// 		lastSet = set
-	// 	}
-	// }
-
-	totalTimes := 24 * 60
+	// Update the number of sets for each group
+	for _, group := range AllGroups {
+		setNums := 0
+		for _, set := range AllSets {
+			if group.Name == "Any" || set.Label == group.Name {
+				setNums++
+			}
+		}
+		group.SetSetNums(setNums)
+	}
 
 	for hour := 0; hour < 24; hour++ {
 		for minute := 0; minute < 60; minute++ {
 			currentTime := time.NewTime(hour, minute)
 
 			// Loop through all sets
-			for _, set := range allSets {
+			for _, set := range AllSets {
 				// Check if the time is valid for the set
 				verification := set.Verify(currentTime.SplitTime())
 				if verification {
 					// Increase the number of times the set was verified
-					set.IncreaseNums()
+					set.Nums++
 
 					// Update the gaps of the set
-					set.GetGaps().UpdateGaps(currentTime)
+					set.Gaps.UpdateGaps(currentTime)
 
 					// Enable the flag for time verified by at least one set.
-					generalSets["Any"].SetAtLeastOne(true)
-					generalSets[set.GetLabel()].SetAtLeastOne(true)
+					AllGroups["Any"].AtLeastOne = true
+					AllGroups[set.Label].AtLeastOne = true
 				} else {
-					set.GetGaps().IncreaseCur(currentTime)
+					set.Gaps.Cur++
 				}
 			}
 
-			// Loop through all general sets
-			for _, generalSet := range generalSets {
+			// Loop through all groups
+			for _, group := range AllGroups {
 				// Check if the time was verified by at least one set (for this general set)
-				if generalSet.GetAtLeastOne() {
+				if group.AtLeastOne {
 					// Increase the number of times the general set was verified
-					generalSet.IncreaseNums()
+					group.EventNums++
 
 					// Update the gaps of the general set
-					generalSet.GetGaps().UpdateGaps(currentTime)
+					group.Gaps.UpdateGaps(currentTime)
 
 					// Reset the flag for time verified by at least one set
-					generalSet.SetAtLeastOne(false)
+					group.AtLeastOne = false
 				} else {
-					generalSet.GetGaps().IncreaseCur(currentTime)
+					group.Gaps.Cur++
 				}
 			}
 
-			if PrintEveryTime {
-				fmt.Printf(">>> TIME = %v\n", currentTime.Stringify())
-				for _, set := range allSets {
-					fmt.Printf(" | %v = %v/%v (Gap = %v)\n", set.GetName(), set.GetNums(), totalTimes, set.GetGaps().Cur)
-				}
-				fmt.Printf("\n")
-			}
+			prints.PrintTime(AllSets, currentTime, TotalTimes)
 		}
 	}
 
 	// Update the gaps averages for all sets
-	for _, set := range allSets {
-		set.GetGaps().UpdateAvg()
+	for _, set := range AllSets {
+		set.Gaps.UpdateAvg()
 	}
-	for _, generalSet := range generalSets {
-		generalSet.GetGaps().UpdateAvg()
+	// Update the gaps averages for all groups
+	for _, group := range AllGroups {
+		group.Gaps.UpdateAvg()
 	}
 
 	// Print the final stats for all sets
-	if PrintFinalStats {
-		fmt.Printf(">>> FINAL STATS:\n")
-		for _, set := range allSets {
-			fmt.Printf(" |- %v = %v/%v\n", set.GetName(), set.GetNums(), totalTimes)
-			if PrintAllGaps {
-				fmt.Printf(" |   Stats:\n |    |- All: %v\n |    |- Min: %v (%v - %v)\n |    |- Max: %v (%v - %v)\n |    |- Avg: %.3f\n\n", set.GetGaps().All, set.GetGaps().Min.Val, set.GetGaps().Min.Prv.Stringify(), set.GetGaps().Min.Cur.Stringify(), set.GetGaps().Max.Val, set.GetGaps().Max.Prv.Stringify(), set.GetGaps().Max.Cur.Stringify(), set.GetGaps().Avg)
-			} else {
-				fmt.Printf(" |   Stats:\n |    |- Min: %v (%v - %v)\n |    |- Max: %v (%v - %v)\n |    |- Avg: %.3f\n\n", set.GetGaps().Min.Val, set.GetGaps().Min.Prv.Stringify(), set.GetGaps().Min.Cur.Stringify(), set.GetGaps().Max.Val, set.GetGaps().Max.Prv.Stringify(), set.GetGaps().Max.Cur.Stringify(), set.GetGaps().Avg)
-			}
-		}
-		for _, generalSet := range generalSets {
-			fmt.Printf(" |- %v = %v/%v\n", generalSet.GetName(), generalSet.GetNums(), totalTimes)
-			if PrintAllGaps {
-				fmt.Printf(" |   Stats:\n |    |- All: %v\n |    |- Min: %v (%v - %v)\n |    |- Max: %v (%v - %v)\n |    |- Avg: %.3f\n\n", generalSet.GetGaps().All, generalSet.GetGaps().Min.Val, generalSet.GetGaps().Min.Prv.Stringify(), generalSet.GetGaps().Min.Cur.Stringify(), generalSet.GetGaps().Max.Val, generalSet.GetGaps().Max.Prv.Stringify(), generalSet.GetGaps().Max.Cur.Stringify(), generalSet.GetGaps().Avg)
-			} else {
-				fmt.Printf(" |   Stats:\n |    |- Min: %v (%v - %v)\n |    |- Max: %v (%v - %v)\n |    |- Avg: %.3f\n\n", generalSet.GetGaps().Min.Val, generalSet.GetGaps().Min.Prv.Stringify(), generalSet.GetGaps().Min.Cur.Stringify(), generalSet.GetGaps().Max.Val, generalSet.GetGaps().Max.Prv.Stringify(), generalSet.GetGaps().Max.Cur.Stringify(), generalSet.GetGaps().Avg)
-			}
-		}
-	}
+	prints.PrintFinal(AllSets, AllGroups, TotalTimes)
 }

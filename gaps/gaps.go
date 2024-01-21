@@ -1,6 +1,6 @@
 package gaps
 
-import "other/bp/cuwu_setstest/time"
+import "github.com/MoraGames/clockyAnalyzer/time"
 
 type (
 	Gaps struct {
@@ -9,12 +9,12 @@ type (
 		Sum int
 		All []int
 		Mma bool
-		Min GapsPair
-		Max GapsPair
+		Min GapsTriad
+		Max GapsTriad
 		Avg float64
 	}
 
-	GapsPair struct {
+	GapsTriad struct {
 		Val int
 		Prv time.Time
 		Cur time.Time
@@ -28,51 +28,37 @@ func NewGaps(lastTime time.Time) *Gaps {
 		Sum: 0,
 		All: make([]int, 0),
 		Mma: false,
-		Min: GapsPair{0, time.Time{}, time.Time{}},
-		Max: GapsPair{0, time.Time{}, time.Time{}},
+		Min: GapsTriad{0, time.Time{}, time.Time{}},
+		Max: GapsTriad{0, time.Time{}, time.Time{}},
 		Avg: 0.0,
 	}
 }
 
 func (g *Gaps) UpdateGaps(cur time.Time) {
-	g.UpdateSum()
-	g.UpdateAll()
-	g.UpdateMma(cur)
-	g.ResetCur(cur)
-}
-
-func (g *Gaps) IncreaseCur(cur time.Time) {
-	g.Cur++
-}
-
-func (g *Gaps) ResetCur(cur time.Time) {
-	g.Lst = cur
-	g.Cur = 1
-}
-
-func (g *Gaps) UpdateSum() {
+	// Update the total gaps sum
 	g.Sum += g.Cur
-}
-
-func (g *Gaps) UpdateAll() {
+	// Append the current gap to the gaps slice
 	g.All = append(g.All, g.Cur)
-}
-
-func (g *Gaps) UpdateMma(cur time.Time) {
+	// Update the minimum and maximum gaps (if necessary)
 	if g.Mma {
 		if g.Cur < g.Min.Val {
-			g.Min = GapsPair{g.Cur, g.Lst, cur}
+			g.Min = GapsTriad{g.Cur, g.Lst, cur}
 		}
 		if g.Cur > g.Max.Val {
-			g.Max = GapsPair{g.Cur, g.Lst, cur}
+			g.Max = GapsTriad{g.Cur, g.Lst, cur}
 		}
 	} else {
 		g.Mma = true
-		g.Min = GapsPair{g.Cur, g.Lst, cur}
-		g.Max = GapsPair{g.Cur, g.Lst, cur}
+		g.Min = GapsTriad{g.Cur, g.Lst, cur}
+		g.Max = GapsTriad{g.Cur, g.Lst, cur}
 	}
+	// Update the last time
+	g.Lst = cur
+	// Reset the current gap
+	g.Cur = 1
 }
 
 func (g *Gaps) UpdateAvg() {
+	// Update the average gap
 	g.Avg = float64(g.Sum) / float64(len(g.All))
 }
