@@ -19,7 +19,7 @@ type EqualSet struct {
 func NewSet_Equal(name, label string) *EqualSet {
 	var set = EqualSet{Name: name, Label: label, Nums: 0}
 
-	lstTime := time.NewTime(23, 23)
+	lstTime := time.NewTime(22, 22)
 	if !set.Verify(lstTime.SplitTime()) {
 		panic("sets: NewSet_Equal: lstTime is not valid")
 	}
