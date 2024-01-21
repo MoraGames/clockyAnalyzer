@@ -16,7 +16,7 @@ type Group struct {
 }
 
 func NewGroup(name string) *Group {
-	return &Group{Name: name, EventNums: 0, AtLeastOne: false, Gaps: gaps.NewGaps(time.NewTime(00, 00)), LastSet: nil}
+	return &Group{Name: name, EventNums: 0, SetNums: 0, AtLeastOne: false, Gaps: gaps.NewGaps(time.NewTime(00, 00)), LastSet: nil}
 }
 
 func (g *Group) IsReady() bool {
