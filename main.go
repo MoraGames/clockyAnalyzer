@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/MoraGames/clockyAnalyzer/groups"
 	"github.com/MoraGames/clockyAnalyzer/prints"
 	"github.com/MoraGames/clockyAnalyzer/sets"
@@ -31,15 +33,15 @@ var (
 		sets.NewSet("ShortRapidRise", "Approved", sets.ShortRapidRise, time.NewTime(23, 57)),
 		sets.NewSet("ShortRapidFall", "Approved", sets.ShortRapidFall, time.NewTime(17, 53)),
 		sets.NewSet("Double", "Approved", sets.Double, time.NewTime(23, 46)),
+		sets.NewSet("ShortTriple", "Approved", sets.ShortTriple, time.NewTime(23, 9)),
+		sets.NewSet("PerfectSquare", "Approved", sets.PerfectSquare, time.NewTime(23, 04)),
 
 		// In-Review sets
-		sets.NewSet("ShortTriple", "Under-Review", sets.ShortTriple, time.NewTime(23, 9)),
-		sets.NewSet("SymmetricalDifference", "Under-Review", sets.SymmetricalDifference, time.NewTime(23, 54)),
-		sets.NewSet("SymmetricalSum", "Under-Review", sets.SymmetricalSum, time.NewTime(23, 56)),
-		sets.NewSet("PerfectSquare", "Under-Review", sets.PerfectSquare, time.NewTime(23, 04)),
+		sets.NewSet("SumAndDifference", "Under-Review", sets.SumAndDifference, time.NewTime(23, 00)),
 
 		// Rejected sets
-		sets.NewSet("SumAndDifference", "Rejected", sets.SumAndDifference, time.NewTime(23, 00)),
+		sets.NewSet("SymmetricalDifference", "Rejected", sets.SymmetricalDifference, time.NewTime(23, 54)),
+		sets.NewSet("SymmetricalSum", "Rejected", sets.SymmetricalSum, time.NewTime(23, 56)),
 	}
 )
 
@@ -58,9 +60,11 @@ func main() {
 		setNums := 0
 		for _, set := range AllSets {
 			if group.Name == "Any" || set.Label == group.Name {
+				fmt.Printf("[DEBUG] SetNums++ : Set %v (%v) for group %v\n", set.Name, set.Label, group.Name)
 				setNums++
 			}
 		}
+		fmt.Printf("[DEBUG] SetNums = %v for group %v\n", setNums, group.Name)
 		group.SetSetNums(setNums)
 	}
 
